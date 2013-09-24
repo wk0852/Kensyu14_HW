@@ -1,0 +1,28 @@
+: cascade base
+: around content -> {
+
+<center>
+
+<form id="input-form" method="post" action="<: $c.req.uri_for('/input') :>" style="margin-top:30px;">
+	<input type=text name="input1"></input>
+	<div class="actions">
+		<input type="submit" class="btn primary" value="Input" />
+	</div>
+</form>
+</center>
+
+<div>
+	<div class="actions" style="margin-bottom:10px;">
+		<button type="button" id="delAllBtn" value="<: $c.req.uri_for('/delall') :>">Delete All</button>
+	</div>
+	<div>
+		: for $db_inputs -> $input_data {
+		<pre class="prettyprint linenums:1">
+		<: $input_data.input_text :>
+		</pre>
+		: }
+	</div>
+</div>
+ 
+: }
+
