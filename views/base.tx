@@ -38,7 +38,7 @@ $(function(){
 
   $('#input-form').submit(function () {
     input_form = this;
-    alert( $(input_form).serialize() );
+//    alert( $(input_form).serialize() );
     
     $.ajax({
       type: 'POST',
