@@ -5,7 +5,10 @@
 <title>hw1309</title>
 <link rel="shortcut icon" href="<: $c.req.uri_for('/favicon.ico') :>" type="image/vnd.microsoft.icon" />
 <link rel="stylesheet" href="<: $c.req.uri_for('/css/bootstrap.min.css') :>">
-<style>
+<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen"
+     href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+ <style>
 body {
   padding-top: 60px;
 }
@@ -21,19 +24,46 @@ body {
 
 <script type="text/javascript" src="<: $c.req.uri_for('/js/jquery.min.js') :>"></script>
 <script type="text/javascript" src="<: $c.req.uri_for('/js/bootstrap.min.js') :>"></script>
+<script type="text/javascript"
+     src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+</script>
+<script type="text/javascript"
+ src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+</script>
 <script type="text/javascript">
 $(function(){
-   
+	$('#datetimepicker1').datetimepicker({
+	  language: 'pt-BR'
+	});
+
   $('#input-form').submit(function () {
     input_form = this;
-// 	      alert( $(input_form).serialize() );
+    alert( $(input_form).serialize() );
+    
     $.ajax({
       type: 'POST',
       url: input_form.action,
       data: $(input_form).serialize(),
       success: function(data) {
 	      location.href = data.location;
-//	      alert( data.arg );
+      },
+      error: function(e) {
+      },
+      dataType: 'json'
+    });
+    return false;
+  });
+
+  $('#edit-form').submit(function () {
+    edit_form = this;
+//    alert( $(edit_form).serialize() );
+    $.ajax({
+      type: 'POST',
+      url: edit_form.action,
+      data: $(edit_form).serialize(),
+      success: function(data) {
+//      	alert( data );
+	      location.href = data.location;
       },
       error: function(e) {
       },
@@ -57,7 +87,6 @@ $(function(){
   });
 
   $('.delBtn').click(function() {
-// 	alert( $(this).attr('id') );  	
     $.ajax({
       type: 'POST',
       url: $(this).val(),
@@ -73,6 +102,21 @@ $(function(){
     });
   });
 
+  $('.editBtn').click(function() {
+    $.ajax({
+      type: 'POST',
+      url: $(this).val(),
+      data: { 
+      	id : $(this).attr('id')
+      },
+      success: function(data) {
+ 	      location.href = data.location;
+      },
+      error: function(e) {
+      },
+      dataType: 'json'
+    });
+  });
 });
 </script>
 </body>

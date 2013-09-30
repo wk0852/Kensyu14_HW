@@ -2,7 +2,7 @@
 : around content -> {
 
 <center>
-
+<h1>ToDo</h1>
 <form id="input-form" method="post" action="<: $c.req.uri_for('/input') :>" style="margin-top:30px;">
 	<span>Title </span><input type=text name="title"></input><br>
 	<span>Memo </span><textarea rows="5" cols="30" name="memo" style="width:400px;"></textarea><br>
@@ -16,7 +16,30 @@
         <option value='0'>新規</option>
         <option value='1'>済み</option>
     </SELECT><br>
+    <span>Deadline </span>
+    <div id="datetimepicker1" class="input-append date">
+		<input data-format="yyyy/MM/dd hh:mm:ss" type="text" name="deadline" placeholder="yyyy/MM/dd hh:mm:ss"></input>
+		<span class="add-on">
+		  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+		  </i>
+		</span>
+	</div>
+
+<!-- 
     <span>Deadline </span><input type=text name="deadline"></input><br>
+ -->
+<!-- 
+	<div class="well">
+	  <div id="datetimepicker1" class="input-append date">
+		<input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+		<span class="add-on">
+		  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+		  </i>
+		</span>
+	  </div>
+	</div>
+ -->
+	
 	<div class="actions">
 		<input type="submit" class="btn primary" value="Input" />
 	</div>

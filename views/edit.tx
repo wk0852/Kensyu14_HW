@@ -1,0 +1,43 @@
+: cascade base
+: around content -> {
+
+<center>
+<h1>EDIT</h1>
+<form id="edit-form" method="post" action="<: $c.req.uri_for('/modify') :>" style="margin-top:30px;">
+	<span>Title </span><input type=text name="edit_title" value="<: $db_outputs[0].title :>"></input><br>
+	<span>Memo </span><textarea rows="5" cols="30" name="edit_memo" style="width:400px;"><: $db_outputs[0].memo :></textarea><br>
+	<span>Priority </span><SELECT name='edit_priority' id='priority' size='1' style="width:100px" value="<: $db_outputs[0].priority :>">
+        <option value='0'>0</option>
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+    </SELECT> 
+    <script>
+	    var element = document.getElementById('priority');
+    	element.value = "<: $db_outputs[0].priority :>";    
+    </script>
+    <span>      </span>
+	<span>Status </span><SELECT name='edit_status' id='status' size='1' style="width:100px" value="<: $db_outputs[0].status :>">
+        <option value='0'>新規</option>
+        <option value='1'>済み</option>
+    </SELECT><br>
+    <script>
+	    var element = document.getElementById('status');
+    	element.value = "<: $db_outputs[0].status :>";    
+    </script>
+    <span>Deadline </span>
+    <div id="datetimepicker1" class="input-append date">
+		<input data-format="yyyy/MM/dd hh:mm:ss" type="text" name="edit_deadline" placeholder="yyyy/MM/dd hh:mm:ss" value="<: $db_outputs[0].deadline :>"></input>
+		<span class="add-on">
+		  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+		  </i>
+		</span>
+	</div>
+    <input type=hidden name="edit_id" value="<: $edit_id :>"></input>
+	<div class="actions">
+		<input type="submit" class="btn primary" value="Modify" />
+	</div>
+</form>
+</center>
+
+: }
+
