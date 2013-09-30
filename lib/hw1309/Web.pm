@@ -3,6 +3,7 @@ package hw1309::Web;
 use strict;
 use warnings;
 use utf8;
+use encoding 'utf8';
 use Kossy;
 use DBIx::Sunny;
 
@@ -13,7 +14,14 @@ sub dbh {
 			connected => sub {
 				my $conn = shift;
 				$conn->do(<<EOF);
-CREATE TABLE IF NOT EXISTS t_history( input_text TEXT );
+CREATE TABLE IF NOT EXISTS content(
+    id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    title VARCHAR(128) NOT NULL,
+    memo TEXT,
+    priority INTEGER NOT NULL,
+    status INTEGER NOT NULL DEFAULT 0 ,
+    deadline DATETIME NOT NULL
+ );
 EOF
 				return; 
 			},
@@ -23,17 +31,17 @@ EOF
 
 sub addDb {
     my $self = shift;
-    my ( $input_text ) = @_;
-    $self->dbh->query(
-        q{INSERT INTO t_history (input_text) VALUES ( ? )},
-        $input_text
-    );
+    my ( $title, $memo, $priority, $deadline  ) = @_;
+#      my $queryStr = q{INSERT INTO content (title, memo, priority, status, deadline) VALUES ( ?, ?, ?, 0, now() )}, $title, $memo, $priority;
+#      $queryStr = Encode::encode("utf-8", $queryStr);
+#      $self->dbh->query( $queryStr );
+       $self->dbh->query( q{INSERT INTO content (title, memo, priority, status, deadline) VALUES ( ?, ?, ?, 0, now() )}, $title, $memo, $priority );
 }
 
 sub getDbList {
     my $self = shift;
     my $rows = $self->dbh->select_all(
-        "SELECT * FROM t_history"
+        "SELECT * FROM content"
     );
     return $rows;
 }
@@ -41,10 +49,18 @@ sub getDbList {
 sub clearDbList {
     my $self = shift;
     $self->dbh->query(
-        "DELETE FROM t_history"
-#         "TRUNCATE TABLE"
+        "DELETE FROM content"
     );
 }
+sub clearDbListOne {
+    my $self = shift;
+    my ( $id  ) = @_;
+    $self->dbh->query(
+        q{DELETE FROM content WHERE id = ?}
+        , $id    
+    );
+}
+
 
 filter 'set_title' => sub {
     my $app = shift;
@@ -58,6 +74,19 @@ filter 'set_title' => sub {
 get '/' => sub {
     my ( $self, $c )  = @_;
     my $db_inputs = $self->getDbList();
+
+#     if( $db_inputs.priority == 0 )
+#     	$db_inputs.priorityStr = "aa";
+#     else if( $db_inputs.priority == 1 )
+#     	$db_inputs.priorityStr = "bb";
+#     else if( $db_inputs.priority == 2 )
+#     	$db_inputs.priorityStr = "cc";
+#     	
+#     if( $db_inputs.status == 0 )
+#     	$db_inputs.priorityStr = "新規";
+#     else if( $db_inputs.status == 1 )
+#     	$db_inputs.priorityStr = "済み";
+    	
     $c->render('index.tx', {
         db_inputs => $db_inputs,
     });
@@ -66,14 +95,34 @@ get '/' => sub {
 post '/input' => sub {
     my ( $self, $c )  = @_;
     my $result = $c->req->validator([
-        'input1' => {
+        'title' => {
 		    rule => [
-                ['NOT_NULL','empty input1'],
+                ['NOT_NULL','empty title'],
+            ],
+        },
+        'memo' => {
+		    rule => [
+                ['NOT_NULL','empty memo'],
+            ],
+        },
+        'priority' => {
+		    rule => [
+                ['NOT_NULL','empty priority'],
+            ],
+        },
+        'status' => {
+		    rule => [
+                ['NOT_NULL','empty status'],
+            ],
+        },
+        'deadline' => {
+		    rule => [
+                ['NOT_NULL','empty deadline'],
             ],
         }
     ]);
-    $self->addDb( $result->valid->get('input1') );
-  	$c->render_json({ location => $c->req->uri_for("/")->as_string }); # send reload url
+	$self->addDb( $result->valid->get('title'), $result->valid->get('memo'), $result->valid->get('priority'), $result->valid->get('deadline') );
+   	$c->render_json({ location => $c->req->uri_for("/")->as_string }); # send reload url
 };
 
 post '/delall' => sub {
@@ -81,6 +130,20 @@ post '/delall' => sub {
     $self->clearDbList();
   	$c->render_json({ location => $c->req->uri_for("/")->as_string }); # send reload url
 };
+
+post '/del' => sub {
+    my ( $self, $c )  = @_;
+    my $result = $c->req->validator([
+        'id' => {
+		    rule => [
+                ['NOT_NULL','empty id'],
+            ]
+        }
+    ]);
+    $self->clearDbListOne($result->valid->get('id'));
+  	$c->render_json({ location => $c->req->uri_for("/")->as_string }); # send reload url
+};
+
 
 1;
 

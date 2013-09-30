@@ -4,7 +4,19 @@
 <center>
 
 <form id="input-form" method="post" action="<: $c.req.uri_for('/input') :>" style="margin-top:30px;">
-	<input type=text name="input1"></input>
+	<span>Title </span><input type=text name="title"></input><br>
+	<span>Memo </span><textarea rows="5" cols="30" name="memo" style="width:400px;"></textarea><br>
+	<span>Priority </span><SELECT name='priority' size='1' style="width:100px">
+        <option value='0'>0</option>
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+    </SELECT> 
+    <span>      </span>
+	<span>Status </span><SELECT name='status' size='1' style="width:100px">
+        <option value='0'>新規</option>
+        <option value='1'>済み</option>
+    </SELECT><br>
+    <span>Deadline </span><input type=text name="deadline"></input><br>
 	<div class="actions">
 		<input type="submit" class="btn primary" value="Input" />
 	</div>
@@ -18,8 +30,16 @@
 	<div>
 		: for $db_inputs -> $input_data {
 		<pre class="prettyprint linenums:1">
-		<: $input_data.input_text :>
+		<: $input_data.title :> <br>
+		<: $input_data.memo :> <br>
+		priority [<: $input_data.priority :>]
+		status [<: $input_data.status :>]
+		deadline [<: $input_data.deadline :>]
+
+		<button type="button" class="delBtn" id="<: $input_data.id :>" value="<: $c.req.uri_for('/del') :>" style="display:inline">Delete</button>
+		<button type="button" class="editBtn" id="<: $input_data.id :>" value="<: $c.req.uri_for('/edit') :>" style="display:inline">Edit</button>
 		</pre>
+		
 		: }
 	</div>
 </div>

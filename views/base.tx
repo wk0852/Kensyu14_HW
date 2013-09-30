@@ -26,12 +26,14 @@ $(function(){
    
   $('#input-form').submit(function () {
     input_form = this;
+// 	      alert( $(input_form).serialize() );
     $.ajax({
       type: 'POST',
       url: input_form.action,
       data: $(input_form).serialize(),
       success: function(data) {
 	      location.href = data.location;
+//	      alert( data.arg );
       },
       error: function(e) {
       },
@@ -45,6 +47,23 @@ $(function(){
       type: 'POST',
       url: $(this).val(),
       data: null,
+      success: function(data) {
+ 	      location.href = data.location;
+      },
+      error: function(e) {
+      },
+      dataType: 'json'
+    });
+  });
+
+  $('.delBtn').click(function() {
+// 	alert( $(this).attr('id') );  	
+    $.ajax({
+      type: 'POST',
+      url: $(this).val(),
+      data: { 
+      	id : $(this).attr('id')
+      },
       success: function(data) {
  	      location.href = data.location;
       },
