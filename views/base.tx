@@ -12,6 +12,15 @@
 body {
   padding-top: 60px;
 }
+
+.outputCell {
+	border-radius: 15px;
+	background-color:rgb(200,200,200);
+	padding: 10px;
+	margin-top:10px;
+	height: 10px;
+	overflow:hidden;
+}
 </style>
 <link rel="stylesheet" href="<: $c.req.uri_for('/css/bootstrap-responsive.min.css') :>">
 </head>
@@ -32,8 +41,15 @@ body {
 </script>
 <script type="text/javascript">
 $(function(){
+	$('.outputCell').mouseover( function(){
+		$(this).css( "height", "120px" );
+	});
+	$('.outputCell').mouseout( function(){
+		$(this).css( "height", "10px" );
+	});
+
 	$('#datetimepicker1').datetimepicker({
-	  language: 'pt-BR'
+	  language: 'en'
 	});
 
   $('#input-form').submit(function () {

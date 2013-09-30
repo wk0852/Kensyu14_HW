@@ -52,16 +52,15 @@
 	</div>
 	<div>
 		: for $db_inputs -> $input_data {
-		<pre class="prettyprint linenums:1">
+		<div class="outputCell">
 		<: $input_data.title :> <br>
-		<: $input_data.memo :> <br>
+		<textarea rows="3" cols="30" style="width:400px;" disabled><: $input_data.memo :></textarea><br>
 		priority [<: $input_data.priority :>]
 		status [<: $input_data.status :>]
 		deadline [<: $input_data.deadline :>]
-
-		<button type="button" class="delBtn" id="<: $input_data.id :>" value="<: $c.req.uri_for('/del') :>" style="display:inline">Delete</button>
-		<button type="button" class="editBtn" id="<: $input_data.id :>" value="<: $c.req.uri_for('/edit') :>" style="display:inline">Edit</button>
-		</pre>
+		<button type="button" class="editBtn" style="margin-left:20px;" id="<: $input_data.id :>" value="<: $c.req.uri_for('/edit') :>" style="display:inline">Edit</button>
+		<button type="button" class="delBtn" style="margin-left:20px;" id="<: $input_data.id :>" value="<: $c.req.uri_for('/del') :>" style="display:inline">Delete</button>
+		</div>
 		
 		: }
 	</div>
